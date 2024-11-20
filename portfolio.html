@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - Alvin Lalanne</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        header {
+            background: linear-gradient(135deg, #004d99, #007bb5);
+            color: #fff;
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+        }
+        header::after {
+            content: '';
+            background: url('downloads/fl stuff for the site-01 2.png') no-repeat center center; /* Add your image */
+            background-size: contain; /* Ensure it fits well; use 'cover' if needed */
+            opacity: 0.5; /* Adjust opacity for blending */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+           height: 100%;
+            z-index: 0; /* Ensures the image is behind the text */
+        }
+        header h1, header p {
+           position: relative;
+           z-index: 1; /* Keeps the text on top of the image */
+        }
+        header h1 {
+            animation: fadeIn 2s ease-in-out;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #333;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        nav a {
+            padding: 14px 20px;
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+        nav a:hover {
+            background-color: #575757;
+        }
+        .container {
+            padding: 20px;
+            max-width: 1000px;
+            margin: auto;
+        }
+        .card {
+            background-color: #fff;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #004d99;
+            color: #fff;
+            margin-top: 20px;
+        }
+        .scroll-top {
+            display: none;
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background-color: #004d99;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .scroll-top:hover {
+            background-color: #007bb5;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Alvin's Portfolio</h1>
+    <p>Exploring the intersection of research, design, and digital anthropology</p>
+</header>
+
+<nav>
+    <a href="#about">About Me</a>
+    <a href="#projects">Projects</a>
+    <a href="#skills">Skills</a>
+    <a href="#contact">Contact</a>
+</nav>
+
+<div class="container">
+    <section class="card" id="about">
+        <h2>About Me</h2>
+        <p>Hi, I'm Alvin Lalanne, a UX researcher and designer passionate about creating meaningful and effective user experiences. With a background in anthropology and digital art, I bring a unique perspective to UX projects.</p>
+    </section>
+
+    <section class="card" id="projects">
+        <h2>Projects</h2>
+        <p>Here are some of my key projects:</p>
+        <ul>
+            <li><strong>Spotify Case Study</strong> - A deep dive into UX research and design improvements for music streaming.</li>
+            <li><strong>Suncoast Credit Union Redesign</strong> - A hypothetical project focusing on enhancing user experience in financial apps.</li>
+            <li><strong>RTS Bus System App</strong> - Ongoing research and design project aimed at improving local transportation usability.</li>
+        </ul>
+    </section>
+
+    <section class="card" id="skills">
+        <h2>Skills</h2>
+        <p>Technical and research skills include:</p>
+        <ul>
+            <li>UX research methodologies</li>
+            <li>HTML, CSS, basic JavaScript</li>
+            <li>Luau scripting</li>
+            <li>Digital art and design tools</li>
+        </ul>
+    </section>
+
+    <section class="card" id="contact">
+        <h2>Contact</h2>
+        <p>I'm always open to discussing new projects or opportunities. You can reach me at <strong>alvin.lalanne@gmail.com</strong> or connect with me on LinkedIn.</p>
+    </section>
+</div>
+
+<button class="scroll-top" onclick="scrollToTop()">↑</button>
+
+<footer>
+    <p>&copy; 2024 Alvin Lalanne | Designed and coded with care.</p>
+</footer>
+
+<script>
+    window.onscroll = function() {
+        const scrollTopButton = document.querySelector('.scroll-top');
+        if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+            scrollTopButton.style.display = 'block';
+        } else {
+            scrollTopButton.style.display = 'none';
+        }
+    };
+
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
