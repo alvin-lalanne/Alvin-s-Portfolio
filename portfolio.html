@@ -15,27 +15,27 @@
             transition: background-color 0.3s, color 0.3s;
         }
         header {
-            background: linear-gradient(135deg, #004d99, #007bb5);
+            position: relative;
             color: #fff;
             padding: 40px 20px;
             text-align: center;
-            position: relative;
+            height: 150px;
+            background: linear-gradient(135deg, #004d99, #007bb5);
+            overflow: hidden;
         }
-        header::after {
-            content: '';
-            background: url('downloads/fl stuff for the site-01 2.png') no-repeat center center; /* Add your image */
-            background-size: contain; /* Ensure it fits well; use 'cover' if needed */
-            opacity: 0.5; /* Adjust opacity for blending */
+        .header-image {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-           height: 100%;
-            z-index: 0; /* Ensures the image is behind the text */
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.5;
+            z-index: 1;
         }
         header h1, header p {
-           position: relative;
-           z-index: 1; /* Keeps the text on top of the image */
+            position: relative;
+            z-index: 2; /* Keeps the text on top of the image */
         }
         header h1 {
             animation: fadeIn 2s ease-in-out;
@@ -105,6 +105,7 @@
 <body>
 
 <header>
+    <img src="C:\Users\alvin\OneDrive\Documents\Alvin's Portfolio\header.png" alt="Header Image" class="header-image">
     <h1>Alvin's Portfolio</h1>
     <p>Exploring the intersection of research, design, and digital anthropology</p>
 </header>
