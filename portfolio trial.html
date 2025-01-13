@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Portfolio - Opening Crawl</title>
+  <link href="https://fonts.googleapis.com/css?family=Pathway+Gothic+One" rel="stylesheet">
+  <style>
+    /* General Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden; /* Initially hidden during intro */
+      font-family: 'Pathway Gothic One', sans-serif;
+      background-color: black;
+      color: #feda4a;
+    }
+
+    /* Skip Button */
+    #skip-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 10px 15px;
+      background-color: #feda4a;
+      border: none;
+      color: black;
+      font-size: 1em;
+      cursor: pointer;
+      z-index: 100;
+      transition: background-color 0.3s ease;
+    }
+    #skip-button:hover {
+      background-color: #ffe700;
+    }
+
+    /* Intro Text (Unchanged) */
+    .intro-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      font-size: 3.5em;
+      color: #00aaff;
+      opacity: 0;
+      animation: introTextFadeIn 3s forwards, introTextFadeOut 2s 7s forwards;
+      z-index: 20;
+    }
+    @keyframes introTextFadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes introTextFadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+    /* Logo Animation (Unchanged) */
+    .logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(10);
+      opacity: 0;
+      animation: logoshrink 17s ease-in-out forwards, logofadeout 3s ease-in forwards;
+      animation-delay: 9s, 23s;
+      z-index: 20;
+    }
+    @keyframes logoshrink {
+      0% { transform: translate(-50%, -50%) scale(10); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(0.1); opacity: 1; }
+    }
+    @keyframes logofadeout {
+      0% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    /* The Crawl (Original Text Restored) */
+    .crawl {
+      position: absolute;
+      bottom: -150vh;
+      width: 100%;
+      height: auto;
+      overflow: hidden;
+      transform-origin: 50% 100%;
+      transform: perspective(800px) rotateX(30deg);
+      font-size: 350%;
+      line-height: 220%;
+      text-align: justify;
+      color: #feda4a;
+      opacity: 0;
+      animation: crawlAnimation 90s linear forwards, crawlFadeIn 2s forwards;
+      animation-delay: 12.5s;
+      z-index: 20;
+    }
+    .crawl .title {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 200%;
+      text-align: center;
+      margin-bottom: 133px;
+    }
+    .crawl .title p {
+      margin-bottom: 300px;
+      font-size: 150%;
+    }
+    .crawl .title h1 {
+      font-size: 250%;
+      margin: 0;
+      white-space: nowrap;
+      margin-bottom: 133px;
+    }
+    @keyframes crawlFadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes crawlAnimation {
+      0% { bottom: -150vh; }
+      100% { bottom: 150vh; }
+    }
+
+    /* Canvas for Dynamic Starfield (Unchanged) */
+    #starfield {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      background: black;
+    }
+
+    /* Portfolio Content */
+    #portfolio-content {
+      position: relative;
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 2s ease-in-out;
+      width: 100%;
+      background: #000;
+      color: #feda4a;
+    }
+
+    /* Hero Section with Basic Interesting Background */
+    #portfolio-hero {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 0 20px;
+      box-sizing: border-box;
+      text-align: center;
+      overflow: hidden;
+    }
+    #portfolio-hero h2 {
+      font-size: 4em;
+      margin-bottom: 20px;
+      font-weight: bold;
+      color: #feda4a;
+    }
+    #portfolio-hero p {
+      font-size: 1.3em;
+      max-width: 600px;
+      line-height: 1.5;
+      margin: 0 auto 40px auto;
+      color: #ccc;
+    }
+    #portfolio-hero .hero-cta {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 15px 30px;
+      background: #feda4a;
+      color: #000;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+    #portfolio-hero .hero-cta:hover {
+      background: #ffe700;
+    }
+
+    /* Simple, interesting background animation: 
+       A subtle radial gradient that 'pulses' by scaling in and out */
+    #portfolio-hero::before {
+      content: '';
+      position: absolute;
+      top:0; left:0; right:0; bottom:0;
+      background: radial-gradient(circle at center, #222 0%, #000 70%);
+      transform-origin: center;
+      animation: pulseGradient 5s infinite alternate ease-in-out;
+      z-index: -1;
+    }
+    @keyframes pulseGradient {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.15); }
+    }
+
+    /* About Me Section */
+    #about-me {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      padding: 100px 20px;
+      box-sizing: border-box;
+      max-width: 1200px;
+      margin: 0 auto;
+      gap: 0px;
+    }
+    #about-me .about-image {
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: #444;
+      background-image: url(trial.png);
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    #about-me .about-text {
+      max-width: 600px;
+    }
+    #about-me .about-text h3 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #feda4a;
+    }
+    #about-me .about-text p {
+      font-size: 1.1em;
+      line-height: 1.6;
+      color: #ddd;
+      margin-bottom: 20px;
+    }
+
+    /* Projects Section */
+    .portfolio-section {
+      padding: 60px 20px;
+      text-align: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .portfolio-section h2 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #feda4a;
+      font-weight: bold;
+    }
+    .portfolio-section p {
+      font-size: 1.1em;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto 50px auto;
+      color: #ccc;
+    }
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      opacity: 0;
+      animation: fadeIn 2s forwards 1s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .project-card {
+      background: #111;
+      border-radius: 10px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      opacity: 0;
+      animation: fadeUp 1s forwards ease;
+      transform: translateY(20px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .project-card:nth-child(1) { animation-delay: 1.2s; }
+    .project-card:nth-child(2) { animation-delay: 1.4s; }
+    .project-card:nth-child(3) { animation-delay: 1.6s; }
+    .project-card:nth-child(4) { animation-delay: 1.8s; }
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(64, 64, 64, 0.7);
+    }
+    .project-card h4 {
+      font-size: 1.3em;
+      margin-bottom: 10px;
+      color: #feda4a;
+      font-weight: bold;
+    }
+    .project-card p {
+      font-size: 0.95em;
+      line-height: 1.4;
+      color: #ccc;
+      margin-bottom: 20px;
+    }
+    .project-card a {
+      color: #feda4a;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <!-- Skip Intro Button -->
+  <button id="skip-button">Skip Intro</button>
+
+  <!-- Canvas for Dynamic Starfield -->
+  <canvas id="starfield"></canvas>
+
+  <!-- Star Wars Intro Wrapper -->
+  <div class="star-wars-intro">
+    <p class="intro-text" id="intro-text">
+      A long time ago in a galaxy far,<br>
+      far away....
+    </p>
+
+    <img src="logo.png" class="logo" alt="Logo" id="logo">
+
+    <section class="crawl" id="crawl">
+      <div class="title">
+        <p>Episode VI</p>
+        <h1>A NEW JOURNEY</h1>
+      </div>
+
+      <p>
+        The galaxy of User Experience is at a crossroads.
+        The job market, fraught with challenges, tests the resolve of
+        even the most determined explorers.
+        Yet, amidst the uncertainty, a spark of hope shines brightly.
+      </p>
+      <p>
+        A new graduate from the UNIVERSITY OF FLORIDA, a passionate
+        designer sets forth on a quest to bring harmony to the ever-expanding
+        digital frontier. Armed with creativity, resilience, and a vision for innovation,
+        they are ready to face trials that will forge their path.
+      </p>
+      <p>
+        Though the journey ahead is marked by fierce competition and evolving landscapes,
+        their determination burns as bright as a distant star. Each challenge presents an
+        opportunity to grow, to learn, and to craft experiences that inspire and transform.
+      </p>
+      <p>
+        As they embark on this new chapter, a hopeful future beckons—a chance to leave their mark
+        on the galaxy and bring balance to the world of design. This is their story...
+      </p>
+    </section>
+  </div>
+
+  <!-- Portfolio Content -->
+  <div id="portfolio-content">
+    <section id="portfolio-hero">
+      <h2>Hi, I’m Alvin Lalanne</h2>
+      <p>A UX Generalist passionate about intuitive interfaces and memorable user experiences. I blend research, strategy, and aesthetics to help products truly connect with their audiences.</p>
+      <a href="#about-me" class="hero-cta">Learn More</a>
+    </section>
+
+    <section id="about-me">
+      <div class="about-image"></div>
+      <div class="about-text">
+        <h3>About Me</h3>
+        <p>
+          I’m a UX Generalist who thrives on understanding user needs and turning complex challenges into elegant solutions. My approach is grounded in empathy, user research, iterative prototyping, and a relentless focus on clarity.
+        </p>
+        <p>
+          Skilled in Figma, Adobe Creative Suite, and a range of testing tools, I enjoy mapping out user journeys that feel natural and engaging. With each project, I aim to balance practicality with delight, ensuring every interaction has purpose and charm.
+        </p>
+      </div>
+    </section>
+
+    <section class="portfolio-section">
+      <h2>My Projects</h2>
+      <p>
+        Below are a few selected works demonstrating my range—research-driven redesigns, digital art, and polished UI prototypes. Each case study and art depicted highlights my design thinking process and the solutions delivered.
+      </p>
+
+      <div class="project-grid">
+        <div class="project-card">
+          <h4>Spotify App Redesign</h4>
+          <p>Redesigned the app, optimizing its pain points to provide a better user experience.</p>
+          <a href="Spotify Case Study.pdf" target="_blank">View Case Study</a>
+        </div>
+        <div class="project-card">
+          <h4>Suncoast App Redesign</h4>
+          <p>Redesigned the banking app, optimizing its pain points to provide a better user experience.</p>
+          <a href="Suncoast Case Study.pdf" target="_blank">View Case Study</a>
+        </div>
+        <div class="project-card">
+          <h4>Vecinos Logo</h4>
+          <p>Redesigned the bar's logo I worked at for commission</p>
+          <a href="Vecinos.pdf" target="_blank" >View Logo</a>
+        </div>
+        <div class="project-card">
+          <h4>Project 4: Coming Soon</h4>
+          <p>A new project is in the works—stay tuned for updates showcasing my latest work!</p>
+          <a href="#" style="cursor: not-allowed; opacity: 0.5;">Coming Soon</a>
+        </div>
+        
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <audio id="theme-audio" src="theme.mp3"></audio>
+
+  <script>
+    let canvas;
+    let ctx;
+    let stars = [];
+    let phase = 'initial';
+    let revealStartTime;
+    let revealDuration = 10000;
+    let centerX, centerY;
+    let globalStarOpacity = 1;
+    const portfolioContent = document.getElementById('portfolio-content');
+    const audio = document.getElementById('theme-audio');
+
+    let musicTimeout, revealTimeout, waitingTimeout;
+
+    window.onload = function () {
+      initStarfield();
+
+      if (audio) audio.load();
+
+      // Start music after intro
+      musicTimeout = setTimeout(function () {
+        if (audio) {
+          audio.currentTime = 0;
+          audio.play().catch(err => console.error('Error playing music', err));
+        }
+      }, 9000);
+
+      // Start reveal after 86s
+      revealTimeout = setTimeout(function () {
+        phase = 'reveal';
+        revealStartTime = Date.now();
+      }, 86000);
+
+      // Waiting phase after reveal done
+      waitingTimeout = setTimeout(function () {
+        phase = 'waiting';
+        fadeOutStarsAndShowPortfolio();
+      }, 86000 + revealDuration);
+
+      // Skip Intro
+      document.getElementById('skip-button').addEventListener('click', function () {
+        if (audio) audio.pause();
+        clearTimeout(musicTimeout);
+        clearTimeout(revealTimeout);
+        clearTimeout(waitingTimeout);
+        phase = 'waiting';
+        fadeOutStarsAndShowPortfolio(true);
+        document.querySelector('.star-wars-intro').style.display = 'none';
+        document.getElementById('skip-button').style.display = 'none';
+      });
+
+      // Hide hero on "Learn More" button click only
+      document.querySelector('#portfolio-hero .hero-cta').addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('portfolio-hero').style.display = 'none';
+      });
+    };
+
+    function fadeOutStarsAndShowPortfolio(instantly = false) {
+      // Allow scrolling now
+      document.body.style.overflow = 'auto';
+
+      // Hide skip button if still visible
+      const skipBtn = document.getElementById('skip-button');
+      if (skipBtn && skipBtn.style.display !== 'none') {
+        skipBtn.style.display = 'none';
+      }
+
+      if (instantly) {
+        globalStarOpacity = 0;
+        portfolioContent.style.opacity = 1;
+        return;
+      }
+
+      let fadeInterval = setInterval(() => {
+        globalStarOpacity -= 0.01;
+        if (globalStarOpacity <= 0) {
+          clearInterval(fadeInterval);
+          globalStarOpacity = 0;
+          portfolioContent.style.opacity = 1;
+        }
+      }, 50);
+    }
+
+    function initStarfield() {
+      canvas = document.getElementById('starfield');
+      ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      centerX = canvas.width / 2;
+      centerY = canvas.height / 2;
+
+      const numStars = 500;
+      for (let i = 0; i < numStars; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 2 + 1,
+          opacity: Math.random(),
+          speed: Math.random() * 0.5 + 0.2
+        });
+      }
+
+      let lastFrameTime = Date.now();
+
+      function animate() {
+        let now = Date.now();
+        let deltaTime = now - lastFrameTime;
+        lastFrameTime = now;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        stars.forEach(star => {
+          if (phase === 'initial') {
+            star.opacity += (Math.random() - 0.5) * 0.05;
+            if (star.opacity < 0.5) star.opacity = 0.5;
+            if (star.opacity > 1) star.opacity = 1;
+          } else if (phase === 'reveal') {
+            let elapsed = now - revealStartTime;
+            let progress = elapsed / revealDuration;
+            if (progress > 1) {
+              progress = 1;
+              phase = 'waiting';
+              fadeOutStarsAndShowPortfolio();
+            }
+            let easedProgress = easeOutCubic(progress);
+            let currentSpeed = star.speed * (1 - easedProgress);
+            star.y -= currentSpeed * (deltaTime / 16.67);
+          } else if (phase === 'waiting') {
+            // no movement, just fade out by globalStarOpacity
+          }
+
+          let starDrawOpacity = star.opacity * globalStarOpacity;
+          ctx.beginPath();
+          ctx.fillStyle = 'rgba(255,255,255,' + starDrawOpacity + ')';
+          ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        requestAnimationFrame(animate);
+      }
+
+      function easeOutCubic(t) {
+        return 1 - Math.pow(1 - t, 3);
+      }
+
+      animate();
+
+      window.addEventListener('resize', function () {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        centerX = canvas.width / 2;
+        centerY = canvas.height / 2;
+      });
+    }
+  </script>
+</body>
+</html>
