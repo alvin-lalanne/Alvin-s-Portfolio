@@ -3,19 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <title>My Portfolio - Opening Crawl</title>
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Pathway+Gothic+One" rel="stylesheet">
+
   <style>
-    /* General Styles */
+    /* ========================
+       1) Global & Body
+    ========================= */
     body {
       margin: 0;
       padding: 0;
-      overflow: hidden; /* Initially hidden during intro */
+      overflow: hidden; /* No scroll initially */
       font-family: 'Pathway Gothic One', sans-serif;
       background-color: black;
       color: #feda4a;
     }
 
-    /* Skip Button */
+    /* Skip Intro Button */
     #skip-button {
       position: absolute;
       top: 20px;
@@ -26,14 +30,52 @@
       color: black;
       font-size: 1em;
       cursor: pointer;
-      z-index: 100;
+      z-index: 100; /* On top of everything */
       transition: background-color 0.3s ease;
     }
     #skip-button:hover {
       background-color: #ffe700;
     }
 
-    /* Intro Text (Unchanged) */
+    /* ========================
+       2) Starfield
+    ========================= */
+    #starfield {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      background: black;
+    }
+
+    /* ========================
+       3) Intro Scale Container
+    ========================= */
+    .intro-scale-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1920px; 
+      height: 1080px;
+      transform-origin: 0 0;
+      outline: 3px dashed red; /* debug border, remove later */
+      z-index: 20; /* Initially above starfield, behind skip button */
+    }
+
+    /* ========================
+       4) Star Wars Intro
+    ========================= */
+    .star-wars-intro {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      /* z-index starts at 20 as well (inherited from .intro-scale-container) */
+    }
+
+    /* Intro Text */
     .intro-text {
       position: absolute;
       top: 50%;
@@ -46,10 +88,16 @@
       animation: introTextFadeIn 3s forwards, introTextFadeOut 2s 7s forwards;
       z-index: 20;
     }
-    @keyframes introTextFadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes introTextFadeOut { from { opacity: 1; } to { opacity: 0; } }
+    @keyframes introTextFadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes introTextFadeOut {
+      from { opacity: 1; }
+      to   { opacity: 0; }
+    }
 
-    /* Logo Animation (Unchanged) */
+    /* Logo Animation */
     .logo {
       position: absolute;
       top: 50%;
@@ -61,15 +109,15 @@
       z-index: 20;
     }
     @keyframes logoshrink {
-      0% { transform: translate(-50%, -50%) scale(10); opacity: 1; }
+      0%   { transform: translate(-50%, -50%) scale(10); opacity: 1; }
       100% { transform: translate(-50%, -50%) scale(0.1); opacity: 1; }
     }
     @keyframes logofadeout {
-      0% { opacity: 1; }
+      0%   { opacity: 1; }
       100% { opacity: 0; }
     }
 
-    /* The Crawl (Original Text Restored) */
+    /* The Crawl (83s total, starts at 10s) */
     .crawl {
       position: absolute;
       bottom: -150vh;
@@ -83,8 +131,9 @@
       text-align: justify;
       color: #feda4a;
       opacity: 0;
-      animation: crawlAnimation 90s linear forwards, crawlFadeIn 2s forwards;
-      animation-delay: 12.5s;
+      /* changed from 90s -> 83s, delay from 12.5s -> 10s */
+      animation: crawlAnimation 83s linear forwards, crawlFadeIn 2s forwards;
+      animation-delay: 10s;
       z-index: 20;
     }
     .crawl .title {
@@ -106,35 +155,32 @@
       white-space: nowrap;
       margin-bottom: 133px;
     }
-    @keyframes crawlFadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes crawlFadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
     @keyframes crawlAnimation {
-      0% { bottom: -150vh; }
+      0%   { bottom: -150vh; }
       100% { bottom: 150vh; }
     }
 
-    /* Canvas for Dynamic Starfield (Unchanged) */
-    #starfield {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-      background: black;
-    }
-
-    /* Portfolio Content */
+    /* ========================
+       5) Portfolio Content
+    ========================= */
+    /* We'll start it behind the intro (z-index: 10) 
+       so the intro is above it at z-index: 20. Later we raise it to 10 
+       after starfield fade or skip. */
     #portfolio-content {
       position: relative;
-      z-index: 10;
-      opacity: 0;
+      z-index: 10; /* behind .star-wars-intro's initial z-index:20 */
+      opacity: 0;  /* Hidden until fade in or Skip Intro clicked */
       transition: opacity 2s ease-in-out;
       width: 100%;
       background: #000;
       color: #feda4a;
     }
 
-    /* Hero Section with Basic Interesting Background */
+    /* Hero Section */
     #portfolio-hero {
       position: relative;
       display: flex;
@@ -176,8 +222,7 @@
       background: #ffe700;
     }
 
-    /* Simple, interesting background animation: 
-       A subtle radial gradient that 'pulses' by scaling in and out */
+    /* Hero BG Pulse */
     #portfolio-hero::before {
       content: '';
       position: absolute;
@@ -188,7 +233,7 @@
       z-index: -1;
     }
     @keyframes pulseGradient {
-      0% { transform: scale(1); }
+      0%   { transform: scale(1); }
       100% { transform: scale(1.15); }
     }
 
@@ -262,7 +307,7 @@
     }
     @keyframes fadeIn {
       from { opacity: 0; }
-      to { opacity: 1; }
+      to   { opacity: 1; }
     }
     .project-card {
       background: #111;
@@ -282,7 +327,7 @@
     .project-card:nth-child(3) { animation-delay: 1.6s; }
     .project-card:nth-child(4) { animation-delay: 1.8s; }
     @keyframes fadeUp {
-      0% { opacity: 0; transform: translateY(20px); }
+      0%   { opacity: 0; transform: translateY(20px); }
       100% { opacity: 1; transform: translateY(0); }
     }
     .project-card:hover {
@@ -313,53 +358,58 @@
   <!-- Skip Intro Button -->
   <button id="skip-button">Skip Intro</button>
 
-  <!-- Canvas for Dynamic Starfield -->
+  <!-- Starfield -->
   <canvas id="starfield"></canvas>
 
-  <!-- Star Wars Intro Wrapper -->
-  <div class="star-wars-intro">
-    <p class="intro-text" id="intro-text">
-      A long time ago in a galaxy far,<br>
-      far away....
-    </p>
+  <!-- Intro Scale Container -->
+  <div class="intro-scale-container">
+    <div class="star-wars-intro">
+      <p class="intro-text" id="intro-text">
+        A long time ago in a galaxy far,<br>
+        far away....
+      </p>
 
-    <img src="logo.png" class="logo" alt="Logo" id="logo">
+      <img src="logo.png" class="logo" alt="Logo" id="logo">
 
-    <section class="crawl" id="crawl">
-      <div class="title">
-        <p>Episode VI</p>
-        <h1>A NEW JOURNEY</h1>
-      </div>
+      <section class="crawl" id="crawl">
+        <div class="title">
+          <p>Episode VI</p>
+          <h1>A NEW JOURNEY</h1>
+        </div>
 
-      <p>
-        The galaxy of User Experience is at a crossroads.
-        The job market, fraught with challenges, tests the resolve of
-        even the most determined explorers.
-        Yet, amidst the uncertainty, a spark of hope shines brightly.
-      </p>
-      <p>
-        A new graduate from the UNIVERSITY OF FLORIDA, a passionate
-        designer sets forth on a quest to bring harmony to the ever-expanding
-        digital frontier. Armed with creativity, resilience, and a vision for innovation,
-        they are ready to face trials that will forge their path.
-      </p>
-      <p>
-        Though the journey ahead is marked by fierce competition and evolving landscapes,
-        their determination burns as bright as a distant star. Each challenge presents an
-        opportunity to grow, to learn, and to craft experiences that inspire and transform.
-      </p>
-      <p>
-        As they embark on this new chapter, a hopeful future beckons—a chance to leave their mark
-        on the galaxy and bring balance to the world of design. This is their story...
-      </p>
-    </section>
+        <p>
+          The galaxy of User Experience is at a crossroads.
+          The job market, fraught with challenges, tests the resolve of
+          even the most determined explorers.
+          Yet, amidst the uncertainty, a spark of hope shines brightly.
+        </p>
+        <p>
+          A new graduate from the UNIVERSITY OF FLORIDA, a passionate
+          designer sets forth on a quest to bring harmony to the ever-expanding
+          digital frontier. Armed with creativity, resilience, and a vision for innovation,
+          they are ready to face trials that will forge their path.
+        </p>
+        <p>
+          Though the journey ahead is marked by fierce competition and evolving landscapes,
+          their determination burns as bright as a distant star. Each challenge presents an
+          opportunity to grow, to learn, and to craft experiences that inspire and transform.
+        </p>
+        <p>
+          As they embark on this new chapter, a hopeful future beckons—a chance to leave their mark
+          on the galaxy and bring balance to the world of design. This is their story...
+        </p>
+      </section>
+    </div>
   </div>
 
   <!-- Portfolio Content -->
   <div id="portfolio-content">
     <section id="portfolio-hero">
       <h2>Hi, I’m Alvin Lalanne</h2>
-      <p>A UX Generalist passionate about intuitive interfaces and memorable user experiences. I blend research, strategy, and aesthetics to help products truly connect with their audiences.</p>
+      <p>
+        A UX Generalist passionate about intuitive interfaces and memorable user experiences. 
+        I blend research, strategy, and aesthetics to help products truly connect with their audiences.
+      </p>
       <a href="#about-me" class="hero-cta">Learn More</a>
     </section>
 
@@ -368,10 +418,14 @@
       <div class="about-text">
         <h3>About Me</h3>
         <p>
-          I’m a UX Generalist who thrives on understanding user needs and turning complex challenges into elegant solutions. My approach is grounded in empathy, user research, iterative prototyping, and a relentless focus on clarity.
+          I’m a UX Generalist who thrives on understanding user needs and turning complex challenges 
+          into elegant solutions. My approach is grounded in empathy, user research, iterative prototyping, 
+          and a relentless focus on clarity.
         </p>
         <p>
-          Skilled in Figma, Adobe Creative Suite, and a range of testing tools, I enjoy mapping out user journeys that feel natural and engaging. With each project, I aim to balance practicality with delight, ensuring every interaction has purpose and charm.
+          Skilled in Figma, Adobe Creative Suite, and a range of testing tools, I enjoy mapping out user 
+          journeys that feel natural and engaging. With each project, I aim to balance practicality with 
+          delight, ensuring every interaction has purpose and charm.
         </p>
       </div>
     </section>
@@ -379,7 +433,9 @@
     <section class="portfolio-section">
       <h2>My Projects</h2>
       <p>
-        Below are a few selected works demonstrating my range—research-driven redesigns, digital art, and polished UI prototypes. Each case study and art depicted highlights my design thinking process and the solutions delivered.
+        Below are a few selected works demonstrating my range—research-driven redesigns, digital art, and 
+        polished UI prototypes. Each case study and art depicted highlights my design thinking process 
+        and the solutions delivered.
       </p>
 
       <div class="project-grid">
@@ -403,23 +459,24 @@
           <p>A new project is in the works—stay tuned for updates showcasing my latest work!</p>
           <a href="#" style="cursor: not-allowed; opacity: 0.5;">Coming Soon</a>
         </div>
-        
-        </div>
       </div>
     </section>
   </div>
 
+  <!-- Star Wars Theme Audio -->
   <audio id="theme-audio" src="theme.mp3"></audio>
 
   <script>
-    let canvas;
-    let ctx;
+    let canvas, ctx;
     let stars = [];
     let phase = 'initial';
     let revealStartTime;
     let revealDuration = 10000;
     let centerX, centerY;
     let globalStarOpacity = 1;
+
+    const introContainer = document.querySelector('.intro-scale-container');
+    const starWarsIntro = document.querySelector('.star-wars-intro');
     const portfolioContent = document.getElementById('portfolio-content');
     const audio = document.getElementById('theme-audio');
 
@@ -427,10 +484,11 @@
 
     window.onload = function () {
       initStarfield();
+      scaleIntroToViewport(); // scale once on load
 
       if (audio) audio.load();
 
-      // Start music after intro
+      // Music starts ~9s
       musicTimeout = setTimeout(function () {
         if (audio) {
           audio.currentTime = 0;
@@ -438,13 +496,13 @@
         }
       }, 9000);
 
-      // Start reveal after 86s
+      // Reveal at 86s
       revealTimeout = setTimeout(function () {
         phase = 'reveal';
         revealStartTime = Date.now();
       }, 86000);
 
-      // Waiting phase after reveal done
+      // Fade out starfield & show portfolio automatically after reveal
       waitingTimeout = setTimeout(function () {
         phase = 'waiting';
         fadeOutStarsAndShowPortfolio();
@@ -458,48 +516,84 @@
         clearTimeout(waitingTimeout);
         phase = 'waiting';
         fadeOutStarsAndShowPortfolio(true);
-        document.querySelector('.star-wars-intro').style.display = 'none';
-        document.getElementById('skip-button').style.display = 'none';
       });
 
-      // Hide hero on "Learn More" button click only
-      document.querySelector('#portfolio-hero .hero-cta').addEventListener('click', function(e) {
+      // "Learn More"
+      const learnMoreBtn = document.querySelector('#portfolio-hero .hero-cta');
+      learnMoreBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        document.getElementById('portfolio-hero').style.display = 'none';
+
+        // If we haven't faded out yet, do it now:
+        if (phase !== 'waiting') {
+          phase = 'waiting';
+          fadeOutStarsAndShowPortfolio(true);
+        }
+        // Optional: Scroll to "about-me"
+        document.getElementById('about-me').scrollIntoView({ behavior: 'smooth' });
       });
+
+      // On resize, re-scale
+      window.addEventListener('resize', scaleIntroToViewport);
     };
 
+    /* Scale the .intro-scale-container to the viewport */
+    function scaleIntroToViewport() {
+      const designWidth = 1920;
+      const designHeight = 1080;
+
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+
+      // Fill at least one dimension
+      const scaleFactor = Math.max(viewportWidth / designWidth, viewportHeight / designHeight);
+
+      introContainer.style.transform = `scale(${scaleFactor})`;
+    }
+
+    // Fade out starfield & raise portfolio
+    // So the intro is behind the portfolio but not removed
     function fadeOutStarsAndShowPortfolio(instantly = false) {
-      // Allow scrolling now
-      document.body.style.overflow = 'auto';
-
-      // Hide skip button if still visible
-      const skipBtn = document.getElementById('skip-button');
-      if (skipBtn && skipBtn.style.display !== 'none') {
-        skipBtn.style.display = 'none';
-      }
-
+      // If we want to instantly show portfolio:
       if (instantly) {
         globalStarOpacity = 0;
         portfolioContent.style.opacity = 1;
+
+        // Lower the intro behind everything:
+        introContainer.style.zIndex = '0'; // .intro-scale-container
+        starWarsIntro.style.zIndex = '0';
+        portfolioContent.style.zIndex = '10';
+
+        // Enable scrolling
+        document.body.style.overflow = 'auto';
         return;
       }
 
+      // Otherwise, we fade out the starfield
       let fadeInterval = setInterval(() => {
         globalStarOpacity -= 0.01;
         if (globalStarOpacity <= 0) {
           clearInterval(fadeInterval);
           globalStarOpacity = 0;
+
+          // Reveal portfolio
           portfolioContent.style.opacity = 1;
+
+          // Push intro behind
+          introContainer.style.zIndex = '0';
+          starWarsIntro.style.zIndex = '0';
+          portfolioContent.style.zIndex = '10';
+
+          // Unlock scrolling
+          document.body.style.overflow = 'auto';
         }
       }, 50);
     }
 
+    // Starfield init
     function initStarfield() {
       canvas = document.getElementById('starfield');
       ctx = canvas.getContext('2d');
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      resizeCanvas();
 
       centerX = canvas.width / 2;
       centerY = canvas.height / 2;
@@ -526,6 +620,7 @@
 
         stars.forEach(star => {
           if (phase === 'initial') {
+            // Slight twinkle
             star.opacity += (Math.random() - 0.5) * 0.05;
             if (star.opacity < 0.5) star.opacity = 0.5;
             if (star.opacity > 1) star.opacity = 1;
@@ -540,11 +635,10 @@
             let easedProgress = easeOutCubic(progress);
             let currentSpeed = star.speed * (1 - easedProgress);
             star.y -= currentSpeed * (deltaTime / 16.67);
-          } else if (phase === 'waiting') {
-            // no movement, just fade out by globalStarOpacity
           }
+          // 'waiting' => no movement, just fade out by globalStarOpacity
 
-          let starDrawOpacity = star.opacity * globalStarOpacity;
+          const starDrawOpacity = star.opacity * globalStarOpacity;
           ctx.beginPath();
           ctx.fillStyle = 'rgba(255,255,255,' + starDrawOpacity + ')';
           ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
@@ -560,12 +654,15 @@
 
       animate();
 
-      window.addEventListener('resize', function () {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        centerX = canvas.width / 2;
-        centerY = canvas.height / 2;
-      });
+      // On resize
+      window.addEventListener('resize', resizeCanvas);
+    }
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      centerX = canvas.width / 2;
+      centerY = canvas.height / 2;
     }
   </script>
 </body>
