@@ -1,175 +1,750 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio - Alvin Lalanne</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-            background-color: #f9f9f9;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        header {
-            position: relative;
-            color: #fff;
-            padding: 40px 20px;
-            text-align: center;
-            height: 150px;
-            background: linear-gradient(135deg, #004d99, #007bb5);
-            overflow: hidden;
-        }
-        .header-image {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.5;
-            z-index: 1;
-        }
-        header h1, header p {
-            position: relative;
-            z-index: 2; /* Keeps the text on top of the image */
-        }
-        header h1 {
-            animation: fadeIn 2s ease-in-out;
-        }
-        nav {
-            display: flex;
-            justify-content: center;
-            background-color: #333;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        nav a {
-            padding: 14px 20px;
-            display: block;
-            color: #fff;
-            text-decoration: none;
-            transition: background 0.3s;
-        }
-        nav a:hover {
-            background-color: #575757;
-        }
-        .container {
-            padding: 20px;
-            max-width: 1000px;
-            margin: auto;
-        }
-        .card {
-            background-color: #fff;
-            margin: 20px 0;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-        }
-        footer {
-            text-align: center;
-            padding: 20px;
-            background-color: #004d99;
-            color: #fff;
-            margin-top: 20px;
-        }
-        .scroll-top {
-            display: none;
-            position: fixed;
-            bottom: 40px;
-            right: 40px;
-            background-color: #004d99;
-            color: #fff;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-        .scroll-top:hover {
-            background-color: #007bb5;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>My Portfolio - Responsive with Breakpoints</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Pathway+Gothic+One" rel="stylesheet">
+
+  <style>
+    /* ========================
+       1) Global & Body (Mobile-First)
+    ========================= */
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden; /* No scroll initially */
+      font-family: 'Pathway Gothic One', sans-serif;
+      background-color: black;
+      color: #feda4a;
+    }
+
+    /* Skip Intro Button */
+    #skip-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 10px 15px;
+      background-color: #feda4a;
+      border: none;
+      color: black;
+      font-size: 1em;
+      cursor: pointer;
+      z-index: 100; /* So it's above other elements */
+      transition: background-color 0.3s ease;
+    }
+    #skip-button:hover {
+      background-color: #ffe700;
+    }
+
+    /* ========================
+       2) Starfield
+    ========================= */
+    #starfield {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      background: black;
+    }
+
+    /* ========================
+       3) Intro Scale Container
+    ========================= */
+    .intro-scale-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1920px; 
+      height: 1080px;
+      transform-origin: 0 0;
+      outline: 3px dashed red; /* debug border, remove later */
+      z-index: 20; /* Above the starfield */
+    }
+
+    /* ========================
+       4) Star Wars Intro
+    ========================= */
+    .star-wars-intro {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Intro Text */
+    .intro-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      font-size: 3.5em;
+      color: #00aaff;
+      opacity: 0;
+      animation: introTextFadeIn 3s forwards, introTextFadeOut 2s 7s forwards;
+      z-index: 20;
+    }
+    @keyframes introTextFadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes introTextFadeOut {
+      from { opacity: 1; }
+      to   { opacity: 0; }
+    }
+
+    /* Logo Animation */
+    .logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(10);
+      opacity: 0;
+      animation: logoshrink 17s ease-in-out forwards, logofadeout 3s ease-in forwards;
+      animation-delay: 9s, 23s;
+      z-index: 20;
+    }
+    @keyframes logoshrink {
+      0%   { transform: translate(-50%, -50%) scale(10); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(0.1); opacity: 1; }
+    }
+    @keyframes logofadeout {
+      0%   { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    /* The Crawl (timing: 83s total, starts at 10s) */
+    .crawl {
+      position: absolute;
+      bottom: -150vh;
+      width: 100%;
+      height: auto;
+      overflow: hidden;
+      transform-origin: 50% 100%;
+      transform: perspective(800px) rotateX(30deg);
+      font-size: 350%;
+      line-height: 220%;
+      text-align: justify;
+      color: #feda4a;
+      opacity: 0;
+      animation: crawlAnimation 83s linear forwards, crawlFadeIn 2s forwards;
+      animation-delay: 10s;
+      z-index: 20;
+    }
+    .crawl .title {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 200%;
+      text-align: center;
+      margin-bottom: 133px;
+    }
+    .crawl .title p {
+      margin-bottom: 300px;
+      font-size: 150%;
+    }
+    .crawl .title h1 {
+      font-size: 250%;
+      margin: 0;
+      white-space: nowrap;
+      margin-bottom: 133px;
+    }
+    @keyframes crawlFadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes crawlAnimation {
+      0%   { bottom: -150vh; }
+      100% { bottom: 150vh; }
+    }
+
+    /* ========================
+       5) Portfolio Content (Mobile-First)
+    ========================= */
+    #portfolio-content {
+      position: relative;
+      z-index: 10;
+      opacity: 0; /* Hidden until fade in or Learn More clicked */
+      transition: opacity 2s ease-in-out;
+      width: 100%;
+      background: #000;
+      color: #feda4a;
+    }
+
+    /* Hero Section (Mobile-First) */
+    #portfolio-hero {
+      position: relative;
+      display: flex;
+      flex-direction: column; /* single column on mobile */
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+      text-align: center;
+      overflow: hidden;
+    }
+    #portfolio-hero h2 {
+      font-size: 2em; /* smaller default for mobile */
+      margin-bottom: 20px;
+      font-weight: bold;
+      color: #feda4a;
+    }
+    #portfolio-hero p {
+      font-size: 1em;
+      max-width: 90%;  /* narrower on mobile */
+      line-height: 1.5;
+      margin: 0 auto 20px auto;
+      color: #ccc;
+    }
+    #portfolio-hero .hero-cta {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 15px 30px;
+      background: #feda4a;
+      color: #000;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+    #portfolio-hero .hero-cta:hover {
+      background: #ffe700;
+    }
+
+    /* Hero BG Pulse */
+    #portfolio-hero::before {
+      content: '';
+      position: absolute;
+      top:0; left:0; right:0; bottom:0;
+      background: radial-gradient(circle at center, #222 0%, #000 70%);
+      transform-origin: center;
+      animation: pulseGradient 5s infinite alternate ease-in-out;
+      z-index: -1;
+    }
+    @keyframes pulseGradient {
+      0%   { transform: scale(1); }
+      100% { transform: scale(1.15); }
+    }
+
+    /* About Me Section (Mobile-First) */
+    #about-me {
+      display: flex;
+      flex-direction: column; /* stack content on mobile */
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      box-sizing: border-box;
+      max-width: 90%;
+      margin: 0 auto;
+    }
+    #about-me .about-image {
+      width: 200px;  /* smaller for mobile */
+      height: 200px;
+      border-radius: 50%;
+      background: #444;
+      background-image: url(trial.png);
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    #about-me .about-text {
+      text-align: center;
+    }
+    #about-me .about-text h3 {
+      font-size: 1.8em;
+      margin-bottom: 20px;
+      color: #feda4a;
+    }
+    #about-me .about-text p {
+      font-size: 1em;
+      line-height: 1.6;
+      color: #ddd;
+      margin-bottom: 20px;
+    }
+
+    /* Projects Section (Mobile-First) */
+    .portfolio-section {
+      padding: 40px 20px;
+      text-align: center;
+      max-width: 100%;
+      margin: 0 auto;
+    }
+    .portfolio-section h2 {
+      font-size: 1.8em;
+      margin-bottom: 20px;
+      color: #feda4a;
+      font-weight: bold;
+    }
+    .portfolio-section p {
+      font-size: 1em;
+      line-height: 1.6;
+      max-width: 90%;
+      margin: 0 auto 30px auto;
+      color: #ccc;
+    }
+    /* On mobile, let's do 1 column by default */
+    .project-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      opacity: 0;
+      animation: fadeIn 2s forwards 1s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    .project-card {
+      background: #111;
+      border-radius: 10px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      opacity: 0;
+      animation: fadeUp 1s forwards ease;
+      transform: translateY(20px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    @keyframes fadeUp {
+      0%   { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(64, 64, 64, 0.7);
+    }
+    .project-card h4 {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      color: #feda4a;
+      font-weight: bold;
+    }
+    .project-card p {
+      font-size: 0.95em;
+      line-height: 1.4;
+      color: #ccc;
+      margin-bottom: 20px;
+    }
+    .project-card a {
+      color: #feda4a;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.9em;
+    }
+
+    /* ========================
+       Media Queries for Larger Screens
+    ========================= */
+
+    /*
+      Tablet Breakpoint (>=768px)
+      Increase font sizes, allow 2-column layout, etc.
+    */
+    @media (min-width: 768px) {
+      #portfolio-hero h2 {
+        font-size: 2.5em; /* bigger on tablet */
+      }
+      #portfolio-hero p {
+        font-size: 1.1em;
+        max-width: 60%; 
+        margin-bottom: 30px;
+      }
+
+      #about-me {
+        max-width: 80%;
+        flex-direction: row; /* side-by-side on tablet and up */
+      }
+      #about-me .about-image {
+        width: 250px;
+        height: 250px;
+        margin-right: 40px;
+        margin-bottom: 0;
+      }
+      #about-me .about-text {
+        text-align: left;
+      }
+      #about-me .about-text h3 {
+        font-size: 2.2em;
+      }
+
+      .portfolio-section h2 {
+        font-size: 2.2em;
+      }
+      .portfolio-section p {
+        font-size: 1.1em;
+        max-width: 70%;
+      }
+
+      /* project-grid => 2 columns on tablet */
+      .project-grid {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 80%;
+        margin: 0 auto;
+      }
+    }
+
+    /*
+      Desktop Breakpoint (>=1024px)
+      Expand further, 3 or more columns, larger text, etc.
+    */
+    @media (min-width: 1024px) {
+      #portfolio-hero {
+        flex-direction: column;
+        min-height: 70vh;
+        padding: 60px 40px;
+      }
+      #portfolio-hero h2 {
+        font-size: 3em;
+      }
+      #portfolio-hero p {
+        font-size: 1.2em;
+        max-width: 50%;
+        margin-bottom: 40px;
+      }
+
+      #about-me {
+        max-width: 1200px;
+        padding: 80px 40px;
+      }
+      #about-me .about-image {
+        width: 300px;
+        height: 300px;
+      }
+      #about-me .about-text h3 {
+        font-size: 2.5em;
+      }
+
+      .portfolio-section h2 {
+        font-size: 2.5em;
+      }
+      .portfolio-section p {
+        font-size: 1.2em;
+        max-width: 800px;
+      }
+
+      /* project-grid => 3 columns on desktop */
+      .project-grid {
+        grid-template-columns: repeat(3, 1fr);
+        max-width: 1200px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <!-- Skip Intro Button -->
+  <button id="skip-button">Skip Intro</button>
 
-<header>
-    <img src="C:\Users\alvin\OneDrive\Documents\Alvin's Portfolio\header.png" alt="Header Image" class="header-image">
-    <h1>Alvin's Portfolio</h1>
-    <p>Exploring the intersection of research, design, and digital anthropology</p>
-</header>
+  <!-- Starfield -->
+  <canvas id="starfield"></canvas>
 
-<nav>
-    <a href="#about">About Me</a>
-    <a href="#projects">Projects</a>
-    <a href="#skills">Skills</a>
-    <a href="#contact">Contact</a>
-</nav>
+  <!-- Intro Scale Container -->
+  <div class="intro-scale-container">
+    <div class="star-wars-intro">
+      <p class="intro-text" id="intro-text">
+        A long time ago in a galaxy far,<br>
+        far away....
+      </p>
 
-<div class="container">
-    <section class="card" id="about">
-        <h2>About Me</h2>
-        <p>Hi, I'm Alvin Lalanne, a UX researcher and designer passionate about creating meaningful and effective user experiences. With a background in anthropology and digital art, I bring a unique perspective to UX projects.</p>
+      <img src="logo.png" class="logo" alt="Logo" id="logo">
+
+      <section class="crawl" id="crawl">
+        <div class="title">
+          <p>Episode VI</p>
+          <h1>A NEW JOURNEY</h1>
+        </div>
+
+        <p>
+          The galaxy of User Experience is at a crossroads.
+          The job market, fraught with challenges, tests the resolve of
+          even the most determined explorers.
+          Yet, amidst the uncertainty, a spark of hope shines brightly.
+        </p>
+        <p>
+          A new graduate from the UNIVERSITY OF FLORIDA, a passionate
+          designer sets forth on a quest to bring harmony to the ever-expanding
+          digital frontier. Armed with creativity, resilience, and a vision for innovation,
+          they are ready to face trials that will forge their path.
+        </p>
+        <p>
+          Though the journey ahead is marked by fierce competition and evolving landscapes,
+          their determination burns as bright as a distant star. Each challenge presents an
+          opportunity to grow, to learn, and to craft experiences that inspire and transform.
+        </p>
+        <p>
+          As they embark on this new chapter, a hopeful future beckons—a chance to leave their mark
+          on the galaxy and bring balance to the world of design. This is their story...
+        </p>
+      </section>
+    </div>
+  </div>
+
+  <!-- Portfolio Content -->
+  <div id="portfolio-content">
+    <section id="portfolio-hero">
+      <h2>Hi, I’m Alvin Lalanne</h2>
+      <p>
+        A UX Generalist passionate about intuitive interfaces and memorable user experiences. 
+        I blend research, strategy, and aesthetics to help products truly connect with their audiences.
+      </p>
+      <a href="#about-me" class="hero-cta">Learn More</a>
     </section>
 
-    <section class="card" id="projects">
-        <h2>Projects</h2>
-        <p>Here are some of my key projects:</p>
-        <ul>
-            <li><strong>Spotify Case Study</strong> - A deep dive into UX research and design improvements for music streaming.</li>
-            <li><strong>Suncoast Credit Union Redesign</strong> - A hypothetical project focusing on enhancing user experience in financial apps.</li>
-            <li><strong>RTS Bus System App</strong> - Ongoing research and design project aimed at improving local transportation usability.</li>
-        </ul>
+    <section id="about-me">
+      <div class="about-image"></div>
+      <div class="about-text">
+        <h3>About Me</h3>
+        <p>
+          I’m a UX Generalist who thrives on understanding user needs and turning complex challenges 
+          into elegant solutions. My approach is grounded in empathy, user research, iterative prototyping, 
+          and a relentless focus on clarity.
+        </p>
+        <p>
+          Skilled in Figma, Adobe Creative Suite, and a range of testing tools, I enjoy mapping out user 
+          journeys that feel natural and engaging. With each project, I aim to balance practicality with 
+          delight, ensuring every interaction has purpose and charm.
+        </p>
+      </div>
     </section>
 
-    <section class="card" id="skills">
-        <h2>Skills</h2>
-        <p>Technical and research skills include:</p>
-        <ul>
-            <li>UX research methodologies</li>
-            <li>HTML, CSS, basic JavaScript</li>
-            <li>Luau scripting</li>
-            <li>Digital art and design tools</li>
-        </ul>
+    <section class="portfolio-section">
+      <h2>My Projects</h2>
+      <p>
+        Below are a few selected works demonstrating my range—research-driven redesigns, digital art, and 
+        polished UI prototypes. Each case study and art depicted highlights my design thinking process 
+        and the solutions delivered.
+      </p>
+
+      <div class="project-grid">
+        <div class="project-card">
+          <h4>Spotify App Redesign</h4>
+          <p>Redesigned the app, optimizing its pain points to provide a better user experience.</p>
+          <a href="Spotify Case Study.pdf" target="_blank">View Case Study</a>
+        </div>
+        <div class="project-card">
+          <h4>Suncoast App Redesign</h4>
+          <p>Redesigned the banking app, optimizing its pain points to provide a better user experience.</p>
+          <a href="Suncoast Case Study.pdf" target="_blank">View Case Study</a>
+        </div>
+        <div class="project-card">
+          <h4>Vecinos Logo</h4>
+          <p>Redesigned the bar's logo I worked at for commission</p>
+          <a href="Vecinos.pdf" target="_blank" >View Logo</a>
+        </div>
+        <div class="project-card">
+          <h4>Project 4: Coming Soon</h4>
+          <p>A new project is in the works—stay tuned for updates showcasing my latest work!</p>
+          <a href="#" style="cursor: not-allowed; opacity: 0.5;">Coming Soon</a>
+        </div>
+      </div>
     </section>
+  </div>
 
-    <section class="card" id="contact">
-        <h2>Contact</h2>
-        <p>I'm always open to discussing new projects or opportunities. You can reach me at <strong>alvin.lalanne@gmail.com</strong> or connect with me on LinkedIn.</p>
-    </section>
-</div>
+  <!-- Star Wars Theme Audio -->
+  <audio id="theme-audio" src="theme.mp3"></audio>
 
-<button class="scroll-top" onclick="scrollToTop()">↑</button>
+  <script>
+    let canvas, ctx;
+    let stars = [];
+    let phase = 'initial';
+    let revealStartTime;
+    let revealDuration = 10000;
+    let centerX, centerY;
+    let globalStarOpacity = 1;
 
-<footer>
-    <p>&copy; 2024 Alvin Lalanne | Designed and coded with care.</p>
-</footer>
+    const portfolioContent = document.getElementById('portfolio-content');
+    const introScaleContainer = document.querySelector('.intro-scale-container');
+    const audio = document.getElementById('theme-audio');
 
-<script>
-    window.onscroll = function() {
-        const scrollTopButton = document.querySelector('.scroll-top');
-        if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-            scrollTopButton.style.display = 'block';
-        } else {
-            scrollTopButton.style.display = 'none';
+    let musicTimeout, revealTimeout, waitingTimeout;
+
+    window.onload = function () {
+      initStarfield();
+      scaleIntroToViewport(); // scale once on load
+
+      if (audio) audio.load();
+
+      // Music starts ~9s
+      musicTimeout = setTimeout(function () {
+        if (audio) {
+          audio.currentTime = 0;
+          audio.play().catch(err => console.error('Error playing music', err));
         }
+      }, 9000);
+
+      // Reveal at 86s
+      revealTimeout = setTimeout(function () {
+        phase = 'reveal';
+        revealStartTime = Date.now();
+      }, 86000);
+
+      // Fade out starfield & show portfolio automatically after reveal
+      waitingTimeout = setTimeout(function () {
+        phase = 'waiting';
+        fadeOutStarsAndShowPortfolio();
+      }, 86000 + revealDuration);
+
+      // Skip Intro
+      document.getElementById('skip-button').addEventListener('click', function () {
+        if (audio) audio.pause();
+        clearTimeout(musicTimeout);
+        clearTimeout(revealTimeout);
+        clearTimeout(waitingTimeout);
+        phase = 'waiting';
+        fadeOutStarsAndShowPortfolio(true);
+
+        // Hide the entire intro quickly if you wish:
+        // document.querySelector('.star-wars-intro').style.display = 'none';
+        // Or just lower z-index if you prefer to keep it visually behind.
+      });
+
+      // "Learn More" => Hide hero, enable scrolling, show entire portfolio, etc.
+      const learnMoreBtn = document.querySelector('#portfolio-hero .hero-cta');
+      learnMoreBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        // Hide hero section
+        document.getElementById('portfolio-hero').style.display = 'none';
+
+        // Show portfolio
+        portfolioContent.style.opacity = 1;
+
+        // Enable scrolling
+        document.body.style.overflow = 'auto';
+
+        // Scroll to "about-me"
+        document.getElementById('about-me').scrollIntoView({ behavior: 'smooth' });
+      });
+
+      // On resize, re-scale
+      window.addEventListener('resize', scaleIntroToViewport);
     };
 
-    function scrollToTop() {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-</script>
+    /* Scale the .intro-scale-container to the viewport */
+    function scaleIntroToViewport() {
+      const designWidth = 1920;
+      const designHeight = 1080;
 
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+
+      // Fill at least one dimension
+      const scaleFactor = Math.max(viewportWidth / designWidth, viewportHeight / designHeight);
+
+      introScaleContainer.style.transform = `scale(${scaleFactor})`;
+    }
+
+    // Fade out starfield & show portfolio
+    function fadeOutStarsAndShowPortfolio(instantly = false) {
+      // Hide skip button if still visible
+      const skipBtn = document.getElementById('skip-button');
+      if (skipBtn && skipBtn.style.display !== 'none') {
+        skipBtn.style.display = 'none';
+      }
+
+      if (instantly) {
+        globalStarOpacity = 0;
+        portfolioContent.style.opacity = 1;
+        document.body.style.overflow = 'auto';
+        return;
+      }
+
+      let fadeInterval = setInterval(() => {
+        globalStarOpacity -= 0.01;
+        if (globalStarOpacity <= 0) {
+          clearInterval(fadeInterval);
+          globalStarOpacity = 0;
+          portfolioContent.style.opacity = 1;
+          document.body.style.overflow = 'auto';
+        }
+      }, 50);
+    }
+
+    // Starfield init
+    function initStarfield() {
+      canvas = document.getElementById('starfield');
+      ctx = canvas.getContext('2d');
+      resizeCanvas();
+
+      centerX = canvas.width / 2;
+      centerY = canvas.height / 2;
+
+      const numStars = 500;
+      for (let i = 0; i < numStars; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 2 + 1,
+          opacity: Math.random(),
+          speed: Math.random() * 0.5 + 0.2
+        });
+      }
+
+      let lastFrameTime = Date.now();
+
+      function animate() {
+        let now = Date.now();
+        let deltaTime = now - lastFrameTime;
+        lastFrameTime = now;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        stars.forEach(star => {
+          if (phase === 'initial') {
+            // Slight twinkle
+            star.opacity += (Math.random() - 0.5) * 0.05;
+            if (star.opacity < 0.5) star.opacity = 0.5;
+            if (star.opacity > 1) star.opacity = 1;
+          } else if (phase === 'reveal') {
+            let elapsed = now - revealStartTime;
+            let progress = elapsed / revealDuration;
+            if (progress > 1) {
+              progress = 1;
+              phase = 'waiting';
+              fadeOutStarsAndShowPortfolio();
+            }
+            let easedProgress = easeOutCubic(progress);
+            let currentSpeed = star.speed * (1 - easedProgress);
+            star.y -= currentSpeed * (deltaTime / 16.67);
+          }
+          // 'waiting' => no movement, just fade out by globalStarOpacity
+
+          const starDrawOpacity = star.opacity * globalStarOpacity;
+          ctx.beginPath();
+          ctx.fillStyle = 'rgba(255,255,255,' + starDrawOpacity + ')';
+          ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        requestAnimationFrame(animate);
+      }
+
+      function easeOutCubic(t) {
+        return 1 - Math.pow(1 - t, 3);
+      }
+
+      animate();
+
+      // On resize
+      window.addEventListener('resize', resizeCanvas);
+    }
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      centerX = canvas.width / 2;
+      centerY = canvas.height / 2;
+    }
+  </script>
 </body>
 </html>
