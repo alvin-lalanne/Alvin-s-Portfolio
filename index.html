@@ -2,21 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>My Portfolio - Opening Crawl</title>
+  <title>My Portfolio - Final Starfield Edition</title>
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Pathway+Gothic+One" rel="stylesheet">
 
   <style>
-    /* ========================
-       1) Global & Body
-    ========================= */
-    body {
+    /*****************************************
+     * 1) GLOBAL & BODY
+    *****************************************/
+    html, body {
       margin: 0;
       padding: 0;
-      overflow: hidden; /* No scroll initially */
+      height: 100%;
       font-family: 'Pathway Gothic One', sans-serif;
       background-color: black;
       color: #feda4a;
+      overflow: hidden; /* no scrolling during intro */
     }
 
     /* Skip Intro Button */
@@ -30,49 +31,50 @@
       color: black;
       font-size: 1em;
       cursor: pointer;
-      z-index: 100; /* On top of everything */
+      z-index: 100; /* on top of everything */
       transition: background-color 0.3s ease;
     }
     #skip-button:hover {
       background-color: #ffe700;
     }
 
-    /* ========================
-       2) Starfield
-    ========================= */
+    /*****************************************
+     * 2) STARFIELD
+     *****************************************/
     #starfield {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 1;
       background: black;
+      z-index: 1; /* behind everything else */
     }
 
-    /* ========================
-       3) Intro Scale Container
-    ========================= */
+    /*****************************************
+     * 3) INTRO SCALE CONTAINER (1920x1080)
+     *    Centered absolutely
+    *****************************************/
     .intro-scale-container {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 1920px; 
+      top: 50%;
+      left: 50%;
+      width: 1920px;
       height: 1080px;
-      transform-origin: 0 0;
-      outline: 3px dashed red; /* debug border, remove later */
-      z-index: 20; /* Initially above starfield, behind skip button */
+      transform-origin: center center; 
+      z-index: 20; /* above starfield, below hero or skip button */
+      /* We'll transform: translate(-50%, -50%) scale(...) in JS */
+      /*outline: 3px dashed red; /* debug border - remove later if desired */
     }
 
-    /* ========================
-       4) Star Wars Intro
-    ========================= */
+    /*****************************************
+     * 4) STAR WARS INTRO
+     *****************************************/
     .star-wars-intro {
       width: 100%;
       height: 100%;
       position: relative;
       overflow: hidden;
-      /* z-index starts at 20 as well (inherited from .intro-scale-container) */
     }
 
     /* Intro Text */
@@ -89,12 +91,12 @@
       z-index: 20;
     }
     @keyframes introTextFadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
+      0%   { opacity: 0; }
+      100% { opacity: 1; }
     }
     @keyframes introTextFadeOut {
-      from { opacity: 1; }
-      to   { opacity: 0; }
+      0%   { opacity: 1; }
+      100% { opacity: 0; }
     }
 
     /* Logo Animation */
@@ -105,7 +107,7 @@
       transform: translate(-50%, -50%) scale(10);
       opacity: 0;
       animation: logoshrink 17s ease-in-out forwards, logofadeout 3s ease-in forwards;
-      animation-delay: 9s, 23s;
+      animation-delay: 9s, 23s; /* same as your old code */
       z-index: 20;
     }
     @keyframes logoshrink {
@@ -120,7 +122,7 @@
     /* The Crawl (83s total, starts at 10s) */
     .crawl {
       position: absolute;
-      bottom: -150vh;
+      bottom: -150%;
       width: 100%;
       height: auto;
       overflow: hidden;
@@ -131,9 +133,8 @@
       text-align: justify;
       color: #feda4a;
       opacity: 0;
-      /* changed from 90s -> 83s, delay from 12.5s -> 10s */
-      animation: crawlAnimation 83s linear forwards, crawlFadeIn 2s forwards;
-      animation-delay: 10s;
+      animation: crawlAnimation 94s linear forwards, crawlFadeIn 2s forwards;
+      animation-delay: 4s;
       z-index: 20;
     }
     .crawl .title {
@@ -156,27 +157,24 @@
       margin-bottom: 133px;
     }
     @keyframes crawlFadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
+      0%   { opacity: 0; }
+      100% { opacity: 1; }
     }
     @keyframes crawlAnimation {
-      0%   { bottom: -150vh; }
-      100% { bottom: 150vh; }
+      0%   { bottom: -150%; }
+      100% { bottom: 150%; }
     }
 
-    /* ========================
-       5) Portfolio Content
-    ========================= */
-    /* We'll start it behind the intro (z-index: 10) 
-       so the intro is above it at z-index: 20. Later we raise it to 10 
-       after starfield fade or skip. */
+    /*****************************************
+     * 5) PORTFOLIO CONTENT (Original Layout)
+     *****************************************/
     #portfolio-content {
       position: relative;
-      z-index: 10; /* behind .star-wars-intro's initial z-index:20 */
-      opacity: 0;  /* Hidden until fade in or Skip Intro clicked */
+      z-index: 10; /* behind .intro-scale-container's default z=20 */
+      opacity: 0;  /* Hidden until we show it in JS */
       transition: opacity 2s ease-in-out;
       width: 100%;
-      background: #000;
+      background: #000; 
       color: #feda4a;
     }
 
@@ -221,7 +219,6 @@
     #portfolio-hero .hero-cta:hover {
       background: #ffe700;
     }
-
     /* Hero BG Pulse */
     #portfolio-hero::before {
       content: '';
@@ -248,20 +245,18 @@
       box-sizing: border-box;
       max-width: 1200px;
       margin: 0 auto;
-      gap: 0px;
     }
     #about-me .about-image {
       width: 300px;
       height: 300px;
       border-radius: 50%;
-      background: #444;
-      background-image: url(trial.png);
-      background-size: cover;
-      background-position: center;
+      background: #444 url(trial.png) center/cover no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      margin-bottom: 20px;
+      margin-right: 40px;
     }
     #about-me .about-text {
       max-width: 600px;
@@ -306,8 +301,8 @@
       animation: fadeIn 2s forwards 1s;
     }
     @keyframes fadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
+      0%   { opacity: 0; }
+      100% { opacity: 1; }
     }
     .project-card {
       background: #111;
@@ -322,6 +317,7 @@
       transform: translateY(20px);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
+    /* Stagger each card a bit */
     .project-card:nth-child(1) { animation-delay: 1.2s; }
     .project-card:nth-child(2) { animation-delay: 1.4s; }
     .project-card:nth-child(3) { animation-delay: 1.6s; }
@@ -332,7 +328,7 @@
     }
     .project-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 15px 35px rgba(64, 64, 64, 0.7);
+      box-shadow: 0 15px 35px rgba(64,64,64,0.7);
     }
     .project-card h4 {
       font-size: 1.3em;
@@ -358,7 +354,7 @@
   <!-- Skip Intro Button -->
   <button id="skip-button">Skip Intro</button>
 
-  <!-- Starfield -->
+  <!-- Starfield Always in Background -->
   <canvas id="starfield"></canvas>
 
   <!-- Intro Scale Container -->
@@ -368,15 +364,12 @@
         A long time ago in a galaxy far,<br>
         far away....
       </p>
-
       <img src="logo.png" class="logo" alt="Logo" id="logo">
-
       <section class="crawl" id="crawl">
         <div class="title">
           <p>Episode VI</p>
           <h1>A NEW JOURNEY</h1>
         </div>
-
         <p>
           The galaxy of User Experience is at a crossroads.
           The job market, fraught with challenges, tests the resolve of
@@ -402,7 +395,7 @@
     </div>
   </div>
 
-  <!-- Portfolio Content -->
+  <!-- Portfolio Content (Hero + About + Projects) -->
   <div id="portfolio-content">
     <section id="portfolio-hero">
       <h2>Hi, I’m Alvin Lalanne</h2>
@@ -452,7 +445,7 @@
         <div class="project-card">
           <h4>Vecinos Logo</h4>
           <p>Redesigned the bar's logo I worked at for commission</p>
-          <a href="Vecinos.pdf" target="_blank" >View Logo</a>
+          <a href="Vecinos.pdf" target="_blank">View Logo</a>
         </div>
         <div class="project-card">
           <h4>Project 4: Coming Soon</h4>
@@ -467,50 +460,56 @@
   <audio id="theme-audio" src="theme.mp3"></audio>
 
   <script>
+    /*****************************************
+     * GLOBAL VARS
+    *****************************************/
     let canvas, ctx;
     let stars = [];
-    let phase = 'initial';
+    let phase = 'initial'; 
     let revealStartTime;
-    let revealDuration = 10000;
-    let centerX, centerY;
-    let globalStarOpacity = 1;
+    const revealDuration = 10000; // 10s star movement
+    let globalStarOpacity = 1; // we never fully fade out starfield
 
-    const introContainer = document.querySelector('.intro-scale-container');
-    const starWarsIntro = document.querySelector('.star-wars-intro');
+    const introContainer   = document.querySelector('.intro-scale-container');
     const portfolioContent = document.getElementById('portfolio-content');
-    const audio = document.getElementById('theme-audio');
+    const skipBtn          = document.getElementById('skip-button');
+    const audioElement     = document.getElementById('theme-audio');
 
     let musicTimeout, revealTimeout, waitingTimeout;
 
-    window.onload = function () {
+    /*****************************************
+     * ON LOAD
+    *****************************************/
+    window.onload = function() {
       initStarfield();
-      scaleIntroToViewport(); // scale once on load
+      scaleIntro();
 
-      if (audio) audio.load();
+      // Preload audio
+      if (audioElement) audioElement.load();
 
-      // Music starts ~9s
-      musicTimeout = setTimeout(function () {
-        if (audio) {
-          audio.currentTime = 0;
-          audio.play().catch(err => console.error('Error playing music', err));
+      // ~9s => music
+      musicTimeout = setTimeout(function() {
+        if (audioElement) {
+          audioElement.currentTime = 0;
+          audioElement.play().catch(err => console.error('Audio play error:', err));
         }
       }, 9000);
 
-      // Reveal at 86s
-      revealTimeout = setTimeout(function () {
+      // 86s => reveal phase => star movement
+      revealTimeout = setTimeout(function() {
         phase = 'reveal';
         revealStartTime = Date.now();
       }, 86000);
 
-      // Fade out starfield & show portfolio automatically after reveal
-      waitingTimeout = setTimeout(function () {
+      // 86s + 10s => 96s => auto fade intro
+      waitingTimeout = setTimeout(function() {
         phase = 'waiting';
         fadeOutStarsAndShowPortfolio();
       }, 86000 + revealDuration);
 
-      // Skip Intro
-      document.getElementById('skip-button').addEventListener('click', function () {
-        if (audio) audio.pause();
+      // Skip
+      skipBtn.addEventListener('click', () => {
+        if (audioElement) audioElement.pause();
         clearTimeout(musicTimeout);
         clearTimeout(revealTimeout);
         clearTimeout(waitingTimeout);
@@ -518,85 +517,74 @@
         fadeOutStarsAndShowPortfolio(true);
       });
 
-      // "Learn More"
+      // "Learn More" => hide hero, etc.
       const learnMoreBtn = document.querySelector('#portfolio-hero .hero-cta');
       learnMoreBtn.addEventListener('click', function(e) {
         e.preventDefault();
-
-        // If we haven't faded out yet, do it now:
-        if (phase !== 'waiting') {
-          phase = 'waiting';
-          fadeOutStarsAndShowPortfolio(true);
-        }
-        // Optional: Scroll to "about-me"
+        // Hide hero
+        document.getElementById('portfolio-hero').style.display = 'none';
+        // Ensure portfolio is visible
+        portfolioContent.style.opacity = 1; 
+        document.body.style.overflow = 'auto';
+        // optional scroll to about
         document.getElementById('about-me').scrollIntoView({ behavior: 'smooth' });
       });
 
-      // On resize, re-scale
-      window.addEventListener('resize', scaleIntroToViewport);
+      window.addEventListener('resize', scaleIntro);
     };
 
-    /* Scale the .intro-scale-container to the viewport */
-    function scaleIntroToViewport() {
-      const designWidth = 1920;
+    /*****************************************
+     * SCALE INTRO: 
+     *  center 1920x1080 with letterbox
+    *****************************************/
+    function scaleIntro() {
+      const designWidth  = 1920;
       const designHeight = 1080;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
 
-      const viewportWidth = window.innerWidth;
-      const viewportHeight = window.innerHeight;
+      // letterbox => smaller factor
+      const scaleFactor = Math.min(vw / designWidth, vh / designHeight);
 
-      // Fill at least one dimension
-      const scaleFactor = Math.max(viewportWidth / designWidth, viewportHeight / designHeight);
-
-      introContainer.style.transform = `scale(${scaleFactor})`;
+      introContainer.style.top  = '50%';
+      introContainer.style.left = '50%';
+      introContainer.style.transform = 
+        `translate(-50%, -50%) scale(${scaleFactor})`;
     }
 
-    // Fade out starfield & raise portfolio
-    // So the intro is behind the portfolio but not removed
-    function fadeOutStarsAndShowPortfolio(instantly = false) {
-      // If we want to instantly show portfolio:
-      if (instantly) {
-        globalStarOpacity = 0;
+    /*****************************************
+     * FADE OUT STARS, SHOW PORTFOLIO
+    *****************************************/
+    function fadeOutStarsAndShowPortfolio(instant = false) {
+      // Hide skip button
+      skipBtn.style.display = 'none';
+
+      if (instant) {
+        globalStarOpacity = 1;  // or 0 if you want them gone, but we keep them
+        // Instead of removing starfield, we just push intro behind
+        introContainer.style.display = 'none'; 
+        // show portfolio
         portfolioContent.style.opacity = 1;
-
-        // Lower the intro behind everything:
-        introContainer.style.zIndex = '0'; // .intro-scale-container
-        starWarsIntro.style.zIndex = '0';
-        portfolioContent.style.zIndex = '10';
-
-        // Enable scrolling
         document.body.style.overflow = 'auto';
         return;
       }
 
-      // Otherwise, we fade out the starfield
-      let fadeInterval = setInterval(() => {
-        globalStarOpacity -= 0.01;
-        if (globalStarOpacity <= 0) {
-          clearInterval(fadeInterval);
-          globalStarOpacity = 0;
-
-          // Reveal portfolio
-          portfolioContent.style.opacity = 1;
-
-          // Push intro behind
-          introContainer.style.zIndex = '0';
-          starWarsIntro.style.zIndex = '0';
-          portfolioContent.style.zIndex = '10';
-
-          // Unlock scrolling
-          document.body.style.overflow = 'auto';
-        }
-      }, 50);
+      // We'll do a minimal fade or just hide the intro
+      // If you actually want the starfield to remain at full brightness,
+      // do not reduce globalStarOpacity. Instead, just hide the .intro-scale-container
+      // so the crawl disappears behind
+      introContainer.style.display = 'none';
+      portfolioContent.style.opacity = 1;
+      document.body.style.overflow = 'auto';
     }
 
-    // Starfield init
+    /*****************************************
+     * STARFIELD
+    *****************************************/
     function initStarfield() {
       canvas = document.getElementById('starfield');
       ctx = canvas.getContext('2d');
       resizeCanvas();
-
-      centerX = canvas.width / 2;
-      centerY = canvas.height / 2;
 
       const numStars = 500;
       for (let i = 0; i < numStars; i++) {
@@ -609,22 +597,23 @@
         });
       }
 
-      let lastFrameTime = Date.now();
-
+      let lastFrame = Date.now();
       function animate() {
         let now = Date.now();
-        let deltaTime = now - lastFrameTime;
-        lastFrameTime = now;
+        let dt  = now - lastFrame;
+        lastFrame = now;
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         stars.forEach(star => {
           if (phase === 'initial') {
-            // Slight twinkle
+            // slight twinkle
             star.opacity += (Math.random() - 0.5) * 0.05;
             if (star.opacity < 0.5) star.opacity = 0.5;
-            if (star.opacity > 1) star.opacity = 1;
-          } else if (phase === 'reveal') {
+            if (star.opacity > 1)   star.opacity = 1;
+          } 
+          else if (phase === 'reveal') {
+            // star moves upward
             let elapsed = now - revealStartTime;
             let progress = elapsed / revealDuration;
             if (progress > 1) {
@@ -632,37 +621,38 @@
               phase = 'waiting';
               fadeOutStarsAndShowPortfolio();
             }
-            let easedProgress = easeOutCubic(progress);
-            let currentSpeed = star.speed * (1 - easedProgress);
-            star.y -= currentSpeed * (deltaTime / 16.67);
+            let eased = easeOutCubic(progress);
+            let currentSpeed = star.speed * (1 - eased);
+            // move star up
+            star.y -= currentSpeed * (dt / 16.67);
           }
-          // 'waiting' => no movement, just fade out by globalStarOpacity
-
-          const starDrawOpacity = star.opacity * globalStarOpacity;
+          // 'waiting' => no star movement, starfield remains
+          
+          // draw
           ctx.beginPath();
-          ctx.fillStyle = 'rgba(255,255,255,' + starDrawOpacity + ')';
-          ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255,255,255,${star.opacity})`;
+          ctx.arc(star.x, star.y, star.size, 0, Math.PI*2);
           ctx.fill();
+
+          // if star leaves top => wrap if you want
+          if (star.y < -50) {
+            star.y = canvas.height + 50; 
+          }
         });
 
         requestAnimationFrame(animate);
       }
-
-      function easeOutCubic(t) {
-        return 1 - Math.pow(1 - t, 3);
-      }
-
       animate();
-
-      // On resize
       window.addEventListener('resize', resizeCanvas);
     }
 
+    function easeOutCubic(t) {
+      return 1 - Math.pow(1 - t, 3);
+    }
+
     function resizeCanvas() {
-      canvas.width = window.innerWidth;
+      canvas.width  = window.innerWidth;
       canvas.height = window.innerHeight;
-      centerX = canvas.width / 2;
-      centerY = canvas.height / 2;
     }
   </script>
 </body>
