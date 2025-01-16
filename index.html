@@ -62,7 +62,7 @@
       height: 1080px;
       transform-origin: center center; 
       z-index: 20; /* above starfield */
-      outline: 3px dashed red; /* debug - remove if desired */
+      /* outline: 3px dashed red; /* debug - remove if desired */
     }
 
     .star-wars-intro {
@@ -131,8 +131,8 @@
       text-align: justify;
       color: #feda4a;
       opacity: 0;
-      animation: crawlAnimation 83s linear forwards, crawlFadeIn 2s forwards;
-      animation-delay: 10s;
+      animation: crawlAnimation 94s linear forwards, crawlFadeIn 2s forwards;
+      animation-delay: 4s;
       z-index: 20;
     }
     .crawl .title {
@@ -353,16 +353,27 @@
      *****************************************/
     #rotate-prompt {
       position: fixed;
-      bottom: 20px; /* near the bottom */
+      bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 999; 
-      display: none; /* hidden by default, show in portrait on mobile */
-      pointer-events: none; /* not clickable if you prefer */
+      z-index: 999;
+      display: none; 
+      pointer-events: none; 
+      text-align: center; /* so text is centered under the image */
     }
+
     #rotate-prompt img {
-      width: 120px; /* adjust as needed */
+      width: 150px; /* or 180px, etc. */
       height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    #rotate-prompt .rotate-message {
+      font-size: 1em; 
+      margin-top: 10px;
+      color: #feda4a;
+      text-align: center;
     }
   </style>
 </head>
