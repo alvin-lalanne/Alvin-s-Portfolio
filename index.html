@@ -40,7 +40,7 @@
 
     /*****************************************
      * 2) STARFIELD
-     *****************************************/
+    *****************************************/
     #starfield {
       position: fixed;
       top: 0;
@@ -53,8 +53,7 @@
 
     /*****************************************
      * 3) INTRO SCALE CONTAINER (1920x1080)
-     *    Centered absolutely
-    *****************************************/
+     *****************************************/
     .intro-scale-container {
       position: absolute;
       top: 50%;
@@ -62,14 +61,10 @@
       width: 1920px;
       height: 1080px;
       transform-origin: center center; 
-      z-index: 20; /* above starfield, below hero or skip button */
-      /* We'll transform: translate(-50%, -50%) scale(...) in JS */
-      /*outline: 3px dashed red; /* debug border - remove later if desired */
+      z-index: 20; /* above starfield */
+      outline: 3px dashed red; /* debug - remove if desired */
     }
 
-    /*****************************************
-     * 4) STAR WARS INTRO
-     *****************************************/
     .star-wars-intro {
       width: 100%;
       height: 100%;
@@ -77,6 +72,9 @@
       overflow: hidden;
     }
 
+    /*****************************************
+     * 4) INTRO TEXT, LOGO, CRAWL
+    *****************************************/
     /* Intro Text */
     .intro-text {
       position: absolute;
@@ -107,7 +105,7 @@
       transform: translate(-50%, -50%) scale(10);
       opacity: 0;
       animation: logoshrink 17s ease-in-out forwards, logofadeout 3s ease-in forwards;
-      animation-delay: 9s, 23s; /* same as your old code */
+      animation-delay: 9s, 23s;
       z-index: 20;
     }
     @keyframes logoshrink {
@@ -133,8 +131,8 @@
       text-align: justify;
       color: #feda4a;
       opacity: 0;
-      animation: crawlAnimation 94s linear forwards, crawlFadeIn 2s forwards;
-      animation-delay: 2s;
+      animation: crawlAnimation 83s linear forwards, crawlFadeIn 2s forwards;
+      animation-delay: 10s;
       z-index: 20;
     }
     .crawl .title {
@@ -167,11 +165,11 @@
 
     /*****************************************
      * 5) PORTFOLIO CONTENT (Original Layout)
-     *****************************************/
+    *****************************************/
     #portfolio-content {
       position: relative;
-      z-index: 10; /* behind .intro-scale-container's default z=20 */
-      opacity: 0;  /* Hidden until we show it in JS */
+      z-index: 10; /* behind the intro's z=20 */
+      opacity: 0;  /* hidden until fade in or skip */
       transition: opacity 2s ease-in-out;
       width: 100%;
       background: #000; 
@@ -204,7 +202,7 @@
       margin: 0 auto 40px auto;
       color: #ccc;
     }
-    #portfolio-hero .hero-cta {
+    .hero-cta {
       display: inline-block;
       margin-top: 20px;
       padding: 15px 30px;
@@ -216,14 +214,14 @@
       text-decoration: none;
       transition: background 0.3s ease;
     }
-    #portfolio-hero .hero-cta:hover {
+    .hero-cta:hover {
       background: #ffe700;
     }
     /* Hero BG Pulse */
     #portfolio-hero::before {
       content: '';
       position: absolute;
-      top:0; left:0; right:0; bottom:0;
+      top: 0; left: 0; right: 0; bottom: 0;
       background: radial-gradient(circle at center, #222 0%, #000 70%);
       transform-origin: center;
       animation: pulseGradient 5s infinite alternate ease-in-out;
@@ -234,7 +232,7 @@
       100% { transform: scale(1.15); }
     }
 
-    /* About Me Section */
+    /* About Me */
     #about-me {
       display: flex;
       flex-direction: row;
@@ -322,6 +320,7 @@
     .project-card:nth-child(2) { animation-delay: 1.4s; }
     .project-card:nth-child(3) { animation-delay: 1.6s; }
     .project-card:nth-child(4) { animation-delay: 1.8s; }
+
     @keyframes fadeUp {
       0%   { opacity: 0; transform: translateY(20px); }
       100% { opacity: 1; transform: translateY(0); }
@@ -348,6 +347,23 @@
       font-weight: bold;
       font-size: 0.9em;
     }
+
+    /*****************************************
+     * 6) ROTATE-PHONE PROMPT FOR MOBILE
+     *****************************************/
+    #rotate-prompt {
+      position: fixed;
+      bottom: 20px; /* near the bottom */
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999; 
+      display: none; /* hidden by default, show in portrait on mobile */
+      pointer-events: none; /* not clickable if you prefer */
+    }
+    #rotate-prompt img {
+      width: 120px; /* adjust as needed */
+      height: auto;
+    }
   </style>
 </head>
 <body>
@@ -357,7 +373,12 @@
   <!-- Starfield Always in Background -->
   <canvas id="starfield"></canvas>
 
-  <!-- Intro Scale Container -->
+  <!-- NEW: Rotate Prompt -->
+  <div id="rotate-prompt">
+    <img src="Phone GIF.gif" alt="Rotate Phone Prompt">
+  </div>
+
+  <!-- Intro Scale Container (1920x1080) -->
   <div class="intro-scale-container">
     <div class="star-wars-intro">
       <p class="intro-text" id="intro-text">
@@ -395,7 +416,7 @@
     </div>
   </div>
 
-  <!-- Portfolio Content (Hero + About + Projects) -->
+  <!-- Portfolio Content -->
   <div id="portfolio-content">
     <section id="portfolio-hero">
       <h2>Hi, I’m Alvin Lalanne</h2>
@@ -456,7 +477,7 @@
     </section>
   </div>
 
-  <!-- Star Wars Theme Audio -->
+  <!-- Audio -->
   <audio id="theme-audio" src="theme.mp3"></audio>
 
   <script>
@@ -467,13 +488,14 @@
     let stars = [];
     let phase = 'initial'; 
     let revealStartTime;
-    const revealDuration = 10000; // 10s star movement
-    let globalStarOpacity = 1; // we never fully fade out starfield
+    const revealDuration = 10000; // star movement duration
+    let globalStarOpacity = 1;
 
     const introContainer   = document.querySelector('.intro-scale-container');
     const portfolioContent = document.getElementById('portfolio-content');
     const skipBtn          = document.getElementById('skip-button');
     const audioElement     = document.getElementById('theme-audio');
+    const rotatePrompt     = document.getElementById('rotate-prompt'); // NEW
 
     let musicTimeout, revealTimeout, waitingTimeout;
 
@@ -484,7 +506,6 @@
       initStarfield();
       scaleIntro();
 
-      // Preload audio
       if (audioElement) audioElement.load();
 
       // ~9s => music
@@ -501,13 +522,13 @@
         revealStartTime = Date.now();
       }, 86000);
 
-      // 86s + 10s => 96s => auto fade intro
+      // 86s + 10s => 96s => fade out intro & show portfolio
       waitingTimeout = setTimeout(function() {
         phase = 'waiting';
         fadeOutStarsAndShowPortfolio();
       }, 86000 + revealDuration);
 
-      // Skip
+      // Skip Intro
       skipBtn.addEventListener('click', () => {
         if (audioElement) audioElement.pause();
         clearTimeout(musicTimeout);
@@ -517,25 +538,46 @@
         fadeOutStarsAndShowPortfolio(true);
       });
 
-      // "Learn More" => hide hero, etc.
+      // "Learn More"
       const learnMoreBtn = document.querySelector('#portfolio-hero .hero-cta');
       learnMoreBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        // Hide hero
         document.getElementById('portfolio-hero').style.display = 'none';
-        // Ensure portfolio is visible
-        portfolioContent.style.opacity = 1; 
+        portfolioContent.style.opacity = 1;
         document.body.style.overflow = 'auto';
-        // optional scroll to about
         document.getElementById('about-me').scrollIntoView({ behavior: 'smooth' });
       });
 
-      window.addEventListener('resize', scaleIntro);
+      // On resize, re-check orientation & scale
+      window.addEventListener('resize', () => {
+        scaleIntro();
+        checkOrientation(); // NEW
+      });
+
+      // Also run orientation check on load
+      checkOrientation(); // NEW
     };
 
     /*****************************************
-     * SCALE INTRO: 
-     *  center 1920x1080 with letterbox
+     * DETECT MOBILE + PORTRAIT => SHOW GIF
+    *****************************************/
+    function isMobileDevice() {
+      return /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+
+    function checkOrientation() {
+      // Show the rotate prompt only if:
+      // 1) It's a mobile device
+      // 2) The height > width => portrait
+      if (isMobileDevice() && window.innerHeight > window.innerWidth) {
+        rotatePrompt.style.display = 'block';
+      } else {
+        rotatePrompt.style.display = 'none';
+      }
+    }
+
+    /*****************************************
+     * SCALE INTRO
     *****************************************/
     function scaleIntro() {
       const designWidth  = 1920;
@@ -548,31 +590,22 @@
 
       introContainer.style.top  = '50%';
       introContainer.style.left = '50%';
-      introContainer.style.transform = 
-        `translate(-50%, -50%) scale(${scaleFactor})`;
+      introContainer.style.transform = `translate(-50%, -50%) scale(${scaleFactor})`;
     }
 
     /*****************************************
-     * FADE OUT STARS, SHOW PORTFOLIO
+     * FADE OUT INTRO, SHOW PORTFOLIO
     *****************************************/
     function fadeOutStarsAndShowPortfolio(instant = false) {
-      // Hide skip button
       skipBtn.style.display = 'none';
 
       if (instant) {
-        globalStarOpacity = 1;  // or 0 if you want them gone, but we keep them
-        // Instead of removing starfield, we just push intro behind
         introContainer.style.display = 'none'; 
-        // show portfolio
         portfolioContent.style.opacity = 1;
         document.body.style.overflow = 'auto';
         return;
       }
-
-      // We'll do a minimal fade or just hide the intro
-      // If you actually want the starfield to remain at full brightness,
-      // do not reduce globalStarOpacity. Instead, just hide the .intro-scale-container
-      // so the crawl disappears behind
+      // do a simple hide
       introContainer.style.display = 'none';
       portfolioContent.style.opacity = 1;
       document.body.style.overflow = 'auto';
@@ -623,18 +656,16 @@
             }
             let eased = easeOutCubic(progress);
             let currentSpeed = star.speed * (1 - eased);
-            // move star up
             star.y -= currentSpeed * (dt / 16.67);
           }
-          // 'waiting' => no star movement, starfield remains
-          
-          // draw
+          // 'waiting' => no star movement
+
           ctx.beginPath();
           ctx.fillStyle = `rgba(255,255,255,${star.opacity})`;
           ctx.arc(star.x, star.y, star.size, 0, Math.PI*2);
           ctx.fill();
 
-          // if star leaves top => wrap if you want
+          // optional star wrapping
           if (star.y < -50) {
             star.y = canvas.height + 50; 
           }
